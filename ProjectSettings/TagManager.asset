@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - JoyStick
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -40,4 +42,16 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1100950459
+    locked: 0
+  - name: Controlls
+    uniqueID: 829658383
+    locked: 0
+  - name: UI
+    uniqueID: 1436353623
+    locked: 0
+  - name: Player
+    uniqueID: 2156938905
     locked: 0

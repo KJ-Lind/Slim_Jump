@@ -14,6 +14,8 @@ public class player_movement : MonoBehaviour
 
     public Rigidbody2D rigidBody;
 
+    bool InAir;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,22 +24,38 @@ public class player_movement : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        Vector2 JumpDir = new Vector2 (dir.x, dir.y);
-        float JumpForce = Force * joyStick.ImpForce;
-
+    { 
         joystick_dir = joyStick.dirVec;
-        dir = (joystick_dir + transform.position);
+        dir = joystick_dir + transform.position;
         Debug.DrawLine(dir, transform.position, Color.magenta);
 
-        if(joyStick.InputActivated && joyStick.touch.phase == TouchPhase.Ended)
+        Vector2 JumpDir = new Vector2(joystick_dir.x, joystick_dir.y);
+        float JumpForce = Force * joyStick.ImpForce;
+
+        if (joyStick.InputActivated && joyStick.touch.phase == TouchPhase.Ended)
         {
             Debug.Log("Jump Force Coinstant=" + Force);
             Debug.Log("Jump Force Variable =" + joyStick.ImpForce);
             Debug.Log("Jump Force Total=" + JumpForce);
+
+            Debug.Log("Jump Dir = " + JumpDir.normalized);
+            if (!InAir)
+            {
+                rigidBody.AddForce(JumpDir.normalized * JumpForce, ForceMode2D.Impulse);
+                InAir = true;
+            }
         }
 
-        rigidBody.AddForce(JumpDir.normalized * JumpForce, ForceMode2D.Impulse);
+        Debug.Log(InAir);
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Ground")
+        {
+            InAir = false;
+        }
 
     }
 }
+
+
