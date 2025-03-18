@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class JoyStick : MonoBehaviour
 {
-    Vector3 originPos = Vector3.zero;
-    public SpriteRenderer sprite;
+    public Vector3 originPos = Vector3.zero;
     public Vector3 dirVec = Vector3.zero;
+
+    public SpriteRenderer Joystick;
+    public SpriteRenderer Area;
+
+    public Transform StickPos;
+    public bool InputActivated;
+    public Touch touch;
+    public float ImpForce;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        InputActivated = false;
     }
 
     // Update is called once per frame
@@ -20,27 +27,38 @@ public class JoyStick : MonoBehaviour
         
         if(Input.touchCount > 0)
         {
-            sprite.enabled = true;
-            Touch touch = Input.GetTouch(0);
+            Joystick.enabled = true;
+            Area.enabled = true;
+            touch = Input.GetTouch(0);
             Vector3 touchPos = Camera.main.ScreenToWorldPoint(touch.position);
             touchPos.z = 0.0f;
+            if (touch.phase == TouchPhase.Began)
+            {
+                originPos = touchPos;
+            }
+
+            transform.position = originPos;
+
             float distance = Vector3.Distance(touchPos, originPos);
+            
             if (distance < 1.5f)
             {
-                transform.position = touchPos;
-                dirVec = touchPos - originPos;
-            }
-            if(touch.phase == TouchPhase.Began)
-            {
-                originPos = transform.position;
+                StickPos.position = touchPos;
+                dirVec = (originPos - StickPos.position);
+                ImpForce = distance;
             }
             
-            Debug.DrawLine(originPos, transform.position, Color.red);
+            
+            Debug.DrawLine(originPos, StickPos.position, Color.red);
+
+            InputActivated = true; 
         }
         else
         {
             dirVec = Vector3.zero;
-            sprite.enabled = false;
+            Joystick.enabled = false;
+            Area.enabled = false;
+            InputActivated = false;
         }
 
     }
