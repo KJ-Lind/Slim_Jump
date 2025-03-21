@@ -10,6 +10,8 @@ public class JoyStick : MonoBehaviour
     public SpriteRenderer Joystick;
     public SpriteRenderer Area;
 
+    public float maxDistance = 1.5f;
+
     public Transform StickPos;
     public bool InputActivated;
     public Touch touch;
@@ -41,12 +43,20 @@ public class JoyStick : MonoBehaviour
 
             float distance = Vector3.Distance(touchPos, originPos);
             
-            if (distance < 1.5f)
+            if (distance < maxDistance)
             {
                 StickPos.position = touchPos;
                 dirVec = (originPos - StickPos.position);
                 ImpForce = distance;
+
+                if (distance >= maxDistance)
+                {
+                    Handheld.Vibrate();
+                }
+
             }
+
+            
             
             
             Debug.DrawLine(originPos, StickPos.position, Color.red);
