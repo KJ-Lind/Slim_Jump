@@ -49,10 +49,10 @@ public class JoyStick : MonoBehaviour
                 dirVec = (originPos - StickPos.position);
                 ImpForce = distance;
 
-                if (distance >= maxDistance)
-                {
-                    Handheld.Vibrate();
-                }
+                //if (distance >= maxDistance)
+                //{
+                //    Handheld.Vibrate();
+                //}
 
             }
 
