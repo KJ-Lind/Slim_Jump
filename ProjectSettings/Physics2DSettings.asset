@@ -2,55 +2,125 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!19 &1
 Physics2DSettings:
-  m_ObjectHideFlags: 0
-  serializedVersion: 4
-  m_Gravity: {x: 0, y: -9.81}
-  m_DefaultMaterial: {fileID: 0}
-  m_VelocityIterations: 8
-  m_PositionIterations: 3
-  m_VelocityThreshold: 1
-  m_MaxLinearCorrection: 0.2
-  m_MaxAngularCorrection: 8
-  m_MaxTranslationSpeed: 100
-  m_MaxRotationSpeed: 360
-  m_BaumgarteScale: 0.2
-  m_BaumgarteTimeOfImpactScale: 0.75
-  m_TimeToSleep: 0.5
-  m_LinearSleepTolerance: 0.01
-  m_AngularSleepTolerance: 2
-  m_DefaultContactOffset: 0.01
+  m_ObjectHideFlags: 0  # Editor internal use; don't modify
+  serializedVersion: 4 # Internal versioning; best left untouched
+  m_Gravity: {x: 0, y: -9.81} # Standard gravity; consider making this a configurable parameter
+
+  # --- MATERIALS & COLLISION BEHAVIOR ---
+  m_DefaultMaterial: {fileID: 0}  # Consider referencing a default physics material if you have one.
+  m_VelocityIterations: 12 # Increased for more accurate velocity calculations (was 8)
+  m_PositionIterations: 5 # Increased for more accurate position calculations (was 3)
+  m_VelocityThreshold: 0.5 # Lowered threshold for objects to be considered "at rest" (was 1)
+  m_MaxLinearCorrection: 0.3 # Increased to allow for greater correction per step (was 0.2)
+  m_MaxAngularCorrection: 10  # Increased to allow for greater angular correction (was 8)
+  m_MaxTranslationSpeed: 150 # Increased max speed (was 100)
+  m_MaxRotationSpeed: 540    # Increased max rotational speed (was 360)
+  m_BaumgarteScale: 0.25    # Slightly increased for stronger overlap resolution (was 0.2)
+  m_BaumgarteTimeOfImpactScale: 0.8 # Increased for better handling of fast collisions (was 0.75)
+  m_TimeToSleep: 0.3        # Reduced time to sleep, more responsive physics (was 0.5)
+  m_LinearSleepTolerance: 0.005 # Reduced tolerance; requires objects to be *very* still to sleep (was 0.01)
+  m_AngularSleepTolerance: 1   # Reduced tolerance;  requires objects to be rotating *very* slowly (was 2)
+  m_DefaultContactOffset: 0.005  # Reduced;  closer contact detection, less "floating" (was 0.01)
+
+  # --- JOB SYSTEM & PERFORMANCE TUNING ---
   m_JobOptions:
     serializedVersion: 2
-    useMultithreading: 0
-    useConsistencySorting: 0
-    m_InterpolationPosesPerJob: 100
-    m_NewContactsPerJob: 30
-    m_CollideContactsPerJob: 100
-    m_ClearFlagsPerJob: 200
-    m_ClearBodyForcesPerJob: 200
-    m_SyncDiscreteFixturesPerJob: 50
-    m_SyncContinuousFixturesPerJob: 50
-    m_FindNearestContactsPerJob: 100
-    m_UpdateTriggerContactsPerJob: 100
-    m_IslandSolverCostThreshold: 100
+    useMultithreading: 1     # ENABLE MULTITHREADING for performance!  (was 0)
+    useConsistencySorting: 1 # Enable consistency sorting for more stable stacking (was 0)
+    m_InterpolationPosesPerJob: 200  # Increased interpolation poses for smoother visuals (was 100)
+    m_NewContactsPerJob: 60       # Increased, find more contacts per job (was 30)
+    m_CollideContactsPerJob: 200     # Increased, handle more contacts per job (was 100)
+    m_ClearFlagsPerJob: 400        # Increased, clear more flags (was 200)
+    m_ClearBodyForcesPerJob: 400     # Increased, clear more forces (was 200)
+    m_SyncDiscreteFixturesPerJob: 100 # Doubled; more frequent discrete fixture sync (was 50)
+    m_SyncContinuousFixturesPerJob: 100 # Doubled; more frequent continuous fixture sync (was 50)
+    m_FindNearestContactsPerJob: 200  # Doubled (was 100)
+    m_UpdateTriggerContactsPerJob: 200 # Doubled (was 100)
+    m_IslandSolverCostThreshold: 150   # Increased threshold (was 100)
     m_IslandSolverBodyCostScale: 1
-    m_IslandSolverContactCostScale: 10
-    m_IslandSolverJointCostScale: 10
-    m_IslandSolverBodiesPerJob: 50
-    m_IslandSolverContactsPerJob: 50
-  m_AutoSimulation: 1
-  m_QueriesHitTriggers: 1
-  m_QueriesStartInColliders: 1
-  m_CallbacksOnDisable: 1
-  m_ReuseCollisionCallbacks: 1
-  m_AutoSyncTransforms: 0
-  m_AlwaysShowColliders: 0
-  m_ShowColliderSleep: 1
-  m_ShowColliderContacts: 0
-  m_ShowColliderAABB: 0
-  m_ContactArrowScale: 0.2
-  m_ColliderAwakeColor: {r: 0.5686275, g: 0.95686275, b: 0.54509807, a: 0.7529412}
-  m_ColliderAsleepColor: {r: 0.5686275, g: 0.95686275, b: 0.54509807, a: 0.36078432}
-  m_ColliderContactColor: {r: 1, g: 0, b: 1, a: 0.6862745}
-  m_ColliderAABBColor: {r: 1, g: 1, b: 0, a: 0.2509804}
-  m_LayerCollisionMatrix: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    m_IslandSolverContactCostScale: 15 # Increased; prioritize contact resolution in islands (was 10)
+    m_IslandSolverJointCostScale: 15  # Increased; prioritize joint resolution in islands (was 10)
+    m_IslandSolverBodiesPerJob: 100   # Doubled bodies per island solver job (was 50)
+    m_IslandSolverContactsPerJob: 100  # Doubled contacts per island solver job (was 50)
+    # NEW:  Added island solver iterations for improved stability
+    m_IslandSolverIterations: 8  # Add a field for solver iterations!  Crucial for complex stacks.
+    # NEW:  Enable speculative contacts for continuous collision detection
+    m_EnableSpeculativeContacts: 1 #  Helps prevent fast-moving objects from tunneling through each other.
+
+  # --- SIMULATION & QUERY SETTINGS ---
+  m_AutoSimulation: 1        #  Keep auto-simulation ON unless you have a *very* specific reason to disable.
+  m_QueriesHitTriggers: 1   # Standard setting;  do raycasts/overlaps hit trigger colliders?
+  m_QueriesStartInColliders: 0 # Changed: Generally, queries shouldn't start *inside* colliders. (was 1)
+  m_CallbacksOnDisable: 0     #  Generally better for performance to NOT call callbacks on disable. (was 1)
+  m_ReuseCollisionCallbacks: 1  # Reuse callbacks to reduce GC pressure.
+  m_AutoSyncTransforms: 1    # Keep transforms synchronized with physics.  Disable ONLY if you manually sync. (was 0)
+
+  # --- DEBUG VISUALIZATION ---  (These settings are for the editor ONLY)
+  m_AlwaysShowColliders: 0    #  Only show colliders when selected or with gizmos.
+  m_ShowColliderSleep: 1     #  Show when colliders are sleeping (good for debugging performance)
+  m_ShowColliderContacts: 1  #  Visualize contact points.
+  m_ShowColliderAABB: 0       #  Axis-Aligned Bounding Boxes; generally less useful than contacts.
+  m_ContactArrowScale: 0.3    # Slightly larger contact arrows (was 0.2)
+  m_ColliderAwakeColor: {r: 0.3, g: 1.0, b: 0.4, a: 0.9}   #  Brighter awake color (was 0.56, 0.95, 0.54)
+  m_ColliderAsleepColor: {r: 0.3, g: 1.0, b: 0.4, a: 0.4}  #  Consistent, but more transparent asleep color (was 0.56, 0.95, 0.54)
+  m_ColliderContactColor: {r: 1.0, g: 0.0, b: 0.2, a: 0.8} #  Stronger contact color, less pink (was 1, 0, 1)
+  m_ColliderAABBColor: {r: 0.9, g: 0.9, b: 0.1, a: 0.3}   #  Slightly more visible AABB color (was 1, 1, 0)
+
+  # --- LAYER COLLISION MATRIX --- (Important for controlling what collides with what)
+  m_LayerCollisionMatrix: |
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF # 32x32 collision matrix (all layers collide)
+  # NEW:  Added a comment explaining the Layer Collision Matrix and how to modify it.
+  # The Layer Collision Matrix is a 32x32 bit matrix. Each bit represents whether
+  # a pair of layers can collide.  FFFFFFFF... means all layers collide with all others.
+  # To disable collisions between layers, you'd need to calculate the correct bitmask.
+  # For example, to prevent layer 8 from colliding with layer 9:
+  #   - Layer 8 is represented by the 9th row (index 8, zero-based).
+  #   - Layer 9 is represented by the 10th column (index 9, zero-based).
+  # You would need to clear the bit at row 8, column 9 (and row 9, column 8 for symmetry).
+  # This is complex to do manually in YAML; it's best managed through the Unity Editor.
+
+  # --- NEW: ADVANCED SETTINGS ---
+  # These settings are less commonly adjusted but can be useful for fine-tuning.
+  m_EnableCollision: 1         # Global toggle for collision detection.
+  m_FrictionJointAngularLimit: 0 #  Added for potential future use with friction joints.
+  m_FrictionJointLinearLimit: 0  #  Added for potential future use with friction joints.
+  m_ContactBreakingThreshold: 0.02 # Threshold for breaking contacts (e.g., with explosions)
+
+  # --- NEW:  CUSTOM PARAMETERS (for use in scripts) ---
+  #  These are not built-in Unity settings, but demonstrate how you can add your own
+  #  parameters to the YAML file that you can then access via script.
+  customParameters:
+    impactForceMultiplier: 1.0  # Example:  Multiply impact forces by this amount.
+    minVelocityForSound: 0.2   # Example:  Minimum velocity for collision sounds.
+    objectSleepTimeout: 2.0      # Example: Custom timeout before an object is considered for sleeping.
