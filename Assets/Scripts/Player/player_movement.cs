@@ -5,7 +5,11 @@ using UnityEngine;
 public class player_movement : MonoBehaviour
 {
 
-    JoyStick joyStick;
+    public Joystick joystick;
+
+    public FloatingJoystick joystickState;
+
+    //JoyStick joyStick;
 
     Vector3 joystick_dir;
     public Vector3 dir = Vector3.zero;
@@ -19,34 +23,37 @@ public class player_movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        joyStick = GameObject.FindGameObjectWithTag("JoyStick").GetComponent<JoyStick>();
+
     }
 
     // Update is called once per frame
     void Update()
-    { 
-        joystick_dir = joyStick.dirVec;
-        dir = joystick_dir + transform.position;
-        Debug.DrawLine(dir, transform.position, Color.magenta);
+    {
+        Vector2 player = new Vector3(transform.position.x, transform.position.y);
 
-        Vector2 JumpDir = new Vector2(joystick_dir.x, joystick_dir.y);
-        float JumpForce = Force * joyStick.ImpForce;
+        Vector2 dir = -joystick.Direction + player;
 
-        if (joyStick.InputActivated && joyStick.touch.phase == TouchPhase.Ended)
+        if (joystickState.state == TouchState.k_Touching)
         {
+            
+            Debug.DrawLine(dir, transform.position, Color.magenta);
+            Debug.Log("Jump Dir = " + dir);
+            Debug.Log("Current State = " + joystickState.state);
+        }
+        
+        if(joystickState.state == TouchState.k_TouchRelease)
+        {
+            rigidBody.AddForce(dir * Force, ForceMode2D.Impulse);
             Debug.Log("Jump Force Coinstant=" + Force);
-            Debug.Log("Jump Force Variable =" + joyStick.ImpForce);
-            Debug.Log("Jump Force Total=" + JumpForce);
-
-            Debug.Log("Jump Dir = " + JumpDir.normalized);
+            Debug.Log("Jump Dir = " + dir);
             if (!InAir)
             {
-                rigidBody.AddForce(JumpDir.normalized * JumpForce, ForceMode2D.Impulse);
                 InAir = true;
             }
+            
+            Debug.Log("Current State = " + joystickState.state);
+            joystickState.state = TouchState.k_NoTouch;
         }
-
-        Debug.Log(InAir);
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
