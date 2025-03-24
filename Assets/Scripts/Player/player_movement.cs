@@ -12,7 +12,9 @@ public class player_movement : MonoBehaviour
     //JoyStick joyStick;
 
     Vector3 joystick_dir;
-    public Vector3 dir = Vector3.zero;
+
+    Vector2 lastDir;
+   
 
     public float Force = 10.0f; 
 
@@ -31,29 +33,30 @@ public class player_movement : MonoBehaviour
     {
         Vector2 player = new Vector3(transform.position.x, transform.position.y);
 
-        Vector2 dir = -joystick.Direction + player;
-
         if (joystickState.state == TouchState.k_Touching)
         {
-            
-            Debug.DrawLine(dir, transform.position, Color.magenta);
-            Debug.Log("Jump Dir = " + dir);
+            lastDir = -joystick.Direction;
+            Debug.DrawLine(lastDir, transform.position, Color.magenta);
+            Debug.Log("Jump Dir = " + lastDir);
             Debug.Log("Current State = " + joystickState.state);
         }
         
         if(joystickState.state == TouchState.k_TouchRelease)
         {
-            rigidBody.AddForce(dir * Force, ForceMode2D.Impulse);
+            //dir = transform.TransformDirection(dir);
+            rigidBody.AddForce(lastDir * Force, ForceMode2D.Impulse);
             Debug.Log("Jump Force Coinstant=" + Force);
-            Debug.Log("Jump Dir = " + dir);
+            Debug.Log("Jump Dir = " + lastDir);
             if (!InAir)
             {
                 InAir = true;
             }
             
             Debug.Log("Current State = " + joystickState.state);
+            lastDir = Vector2.zero;
             joystickState.state = TouchState.k_NoTouch;
         }
+        
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
