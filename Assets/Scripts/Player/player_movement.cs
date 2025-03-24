@@ -37,22 +37,19 @@ public class player_movement : MonoBehaviour
         {
             lastDir = -joystick.Direction;
             Debug.DrawLine(lastDir, transform.position, Color.magenta);
-            Debug.Log("Jump Dir = " + lastDir);
-            Debug.Log("Current State = " + joystickState.state);
+
         }
         
         if(joystickState.state == TouchState.k_TouchRelease)
         {
             //dir = transform.TransformDirection(dir);
             rigidBody.AddForce(lastDir * Force, ForceMode2D.Impulse);
-            Debug.Log("Jump Force Coinstant=" + Force);
-            Debug.Log("Jump Dir = " + lastDir);
+
             if (!InAir)
             {
                 InAir = true;
             }
             
-            Debug.Log("Current State = " + joystickState.state);
             lastDir = Vector2.zero;
             joystickState.state = TouchState.k_NoTouch;
         }
