@@ -14,6 +14,8 @@ public class player_movement : MonoBehaviour
     Vector3 joystick_dir;
 
     Vector2 lastDir;
+
+    [SerializeField] private Animator animator;
    
 
     public float Force = 10.0f; 
@@ -43,11 +45,16 @@ public class player_movement : MonoBehaviour
         if(joystickState.state == TouchState.k_TouchRelease)
         {
             //dir = transform.TransformDirection(dir);
-            rigidBody.AddForce(lastDir * Force, ForceMode2D.Impulse);
 
             if (!InAir)
             {
+                rigidBody.AddForce(lastDir * Force, ForceMode2D.Impulse);
+                animator.SetBool("IsJumping", true);
                 InAir = true;
+            }
+            else
+            {
+                animator.SetBool("IsJumping", false);
             }
             
             lastDir = Vector2.zero;
