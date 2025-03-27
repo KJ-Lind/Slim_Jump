@@ -142,7 +142,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &109870117
 RectTransform:
   m_ObjectHideFlags: 0
@@ -605,7 +605,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4, y: 2.5}
+  m_Size: {x: 5, y: 3}
   m_EdgeRadius: 0
 --- !u!50 &250404121
 Rigidbody2D:
@@ -659,13 +659,13 @@ MonoBehaviour:
   joystickState: {fileID: 1405029398}
   Force: 7.8
   rigidBody: {fileID: 250404121}
-  GroundBoxSize: {x: 0.55, y: 0.2}
+  GroundBoxSize: {x: 0.7, y: 0.2}
   GroundCastDist: 0.25
   GroundMask:
     serializedVersion: 2
     m_Bits: 64
   WallBoxSize: {x: 0.1, y: 0.1}
-  WallCastDist: 0.3
+  WallCastDist: 0.35
   WallMask:
     serializedVersion: 2
     m_Bits: 128
@@ -3308,6 +3308,7 @@ GameObject:
   - component: {fileID: 294079572}
   - component: {fileID: 294079571}
   - component: {fileID: 294079570}
+  - component: {fileID: 294079573}
   m_Layer: 0
   m_Name: Tutorial
   m_TagString: Untagged
@@ -3396,6 +3397,22 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &294079573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 294079568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55b8853f230b2274f83ae577635390b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialog: {fileID: 109870121}
+  mainCanvas: {fileID: 1073669677}
+  finger: {fileID: 109870116}
+  tutorialDuration: 10
 --- !u!1 &359226991
 GameObject:
   m_ObjectHideFlags: 0
@@ -3883,7 +3900,7 @@ SpriteRenderer:
   m_SortingLayerID: -2138028391
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: afd793b1787964e44aa4ce39e16e5bcf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4235fdf3d7c909845840585dd36493b4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3903,7 +3920,7 @@ Transform:
   m_GameObject: {fileID: 516306194}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.5, y: 1.6, z: 2}
   m_Children: []
   m_Father: {fileID: 250404122}
   m_RootOrder: 0
@@ -4349,7 +4366,7 @@ GameObject:
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &669672968
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4411,7 +4428,7 @@ MonoBehaviour:
     - So I will give you a mission.
     - Get to the top of this tower.
     - And bring my beloved curios kitten back.
-    - And before y forget.
+    - And before I forget.
     - I will give you a hint.
     - You'll have to JUMP a lot.
     - Now go get that darn kitten.

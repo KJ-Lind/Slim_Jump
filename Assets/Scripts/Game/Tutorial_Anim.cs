@@ -24,6 +24,8 @@ public class Tutorial_Anim : MonoBehaviour
         {
             localTime = tutorialDuration;
             finger.SetActive(true);
+            dialog.DialogCanvas.SetActive(false);
+            tutorialActive = true;
         }
 
         if(localTime <= 0 && tutorialActive)
