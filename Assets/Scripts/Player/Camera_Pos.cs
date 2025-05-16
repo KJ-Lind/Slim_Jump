@@ -24,13 +24,13 @@ public class Camera_Pos : MonoBehaviour
           nodes node = nodes[i].GetComponent<nodes>();
           if (node.IsActive && slime.IsGrounded())
           {
-            Debug.Log("There Is Collision in node" + nodes[i].name);
+            //Debug.Log("There Is Collision in node" + nodes[i].name);
             gameObject.transform.position = new Vector3(0.0f, nodes[i].transform.position.y, -1.0f);
           }
 
           if(node.IsActive && slime.transform.position.y < slime.groundedPos.y)
           {
-            Debug.Log("There Is Collision in node" + nodes[i].name);
+            //Debug.Log("There Is Collision in node" + nodes[i].name);
             gameObject.transform.position = new Vector3(0.0f, nodes[i].transform.position.y, -1.0f);
           }
 
