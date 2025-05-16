@@ -25,6 +25,8 @@ public class player_movement : MonoBehaviour
 
     public Rigidbody2D rigidBody;
 
+    public Vector2 groundedPos; 
+
 
     [Header("Ground Box Cast")]
 
@@ -43,11 +45,26 @@ public class player_movement : MonoBehaviour
     void Start()
     {
       dir_indicator.GetComponentInChildren<Renderer>().enabled = false;
+
+      groundedPos = transform.position;
+
+      rigidBody.drag = 5.0f;
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (IsGrounded())
+        {
+          rigidBody.drag = 5.0f;
+        }
+        else
+        {
+          rigidBody.drag = 0.0f;
+        }
+
 
         if (IsWall_Right() && !IsGrounded())
         {
@@ -95,6 +112,7 @@ public class player_movement : MonoBehaviour
     {
         if(Physics2D.BoxCast(transform.position, GroundBoxSize, 0, -transform.up, GroundCastDist, GroundMask))
         {
+            groundedPos = transform.position;
             return true;
         }
         else
