@@ -8,7 +8,6 @@ public class coins : MonoBehaviour
 
   private void OnTriggerEnter2D(Collider2D collision)
   {
-    Debug.Log("COLISION");
     if(collision.tag == "Player")
     {
       Player_Stats stats = collision.GetComponent<Player_Stats>();
