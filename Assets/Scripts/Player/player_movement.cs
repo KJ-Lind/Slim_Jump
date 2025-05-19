@@ -25,7 +25,12 @@ public class player_movement : MonoBehaviour
 
     public Rigidbody2D rigidBody;
 
-    public Vector2 groundedPos; 
+    public Vector2 groundedPos;
+
+    private Vector2 originalScale; 
+    private Vector2 newScale;
+    private float initialScale = 1.0f;
+    private bool WasGrounded = true;
 
 
     [Header("Ground Box Cast")]
@@ -47,6 +52,7 @@ public class player_movement : MonoBehaviour
       dir_indicator.GetComponentInChildren<Renderer>().enabled = false;
 
       groundedPos = transform.position;
+      originalScale = transform.localScale;
 
       rigidBody.drag = 5.0f;
 
@@ -55,6 +61,15 @@ public class player_movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        bool currentlyGrounded = IsGrounded(); 
+
+        if(!WasGrounded && currentlyGrounded) 
+        {
+          StartCoroutine(SquishAnimation());
+        }
+
+        WasGrounded = currentlyGrounded;
 
         if (IsGrounded())
         {
@@ -84,6 +99,9 @@ public class player_movement : MonoBehaviour
             lastDir = -joystick.Direction;
             
             Vector2 player_pos = transform.position;
+
+            transform.localScale = new Vector2(originalScale.x * 1.2f, originalScale.y * 0.9f);
+
             var dir_ind = -joystick.Direction;
             dir_indicator.transform.localScale = new Vector2(dir_ind.magnitude * 1.0f, dir_ind.magnitude * 2f);
             var angle = Mathf.Atan2(dir_ind.x, dir_ind.y) * Mathf.Rad2Deg;
@@ -96,6 +114,7 @@ public class player_movement : MonoBehaviour
         {
             //dir = transform.TransformDirection(dir);
             dir_indicator.GetComponentInChildren<Renderer>().enabled = false;
+            transform.localScale = originalScale;
 
             if (IsGrounded())
             {
@@ -108,7 +127,34 @@ public class player_movement : MonoBehaviour
         
     }
 
-    public bool IsGrounded()
+    IEnumerator SquishAnimation()
+    {
+      float squishDuration = 0.15f;
+      float t = 0;
+
+      Vector2 squishScale = new Vector2(originalScale.x * 1.2f, originalScale.y * 0.8f);
+
+      // Squish
+      while (t < squishDuration)
+      {
+        transform.localScale = Vector2.Lerp(originalScale, squishScale, t / squishDuration);
+        t += Time.deltaTime;
+        yield return null;
+      }
+
+      // Reset
+      t = 0;
+      while (t < squishDuration)
+      {
+        transform.localScale = Vector2.Lerp(squishScale, originalScale, t / squishDuration);
+        t += Time.deltaTime;
+        yield return null;
+      }
+
+      transform.localScale = originalScale;
+    }
+
+  public bool IsGrounded()
     {
         if(Physics2D.BoxCast(transform.position, GroundBoxSize, 0, -transform.up, GroundCastDist, GroundMask))
         {
