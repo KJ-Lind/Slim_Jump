@@ -11,7 +11,7 @@ public class Game_End : MonoBehaviour
     {
         //Do end animations
 
-        Time.timeScale = 1f;
+        Time.timeScale = 0f;
         EndScreen.SetActive(true);
     }
 }
